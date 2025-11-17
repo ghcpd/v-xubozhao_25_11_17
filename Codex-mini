@@ -1,0 +1,90 @@
+🧪 Today's Test: Dependency Upgrade
+Category: Dependency upgrade
+Definition: Detect outdated or insecure libraries, produce upgrade plan, and generate version diff.
+
+🎯 Task Description
+You are maintaining a Python project with outdated dependencies.
+Your task is to perform a dependency upgrade assessment based on the provided input file.
+
+Your Tasks
+Review the given dependency file (requirements_old.txt).
+
+Detect outdated, deprecated, or insecure versions.
+
+Generate a dependency version diff table (old → latest stable).
+
+Identify any obsolete libraries and produce warnings.
+
+Create all automation files needed for a fully reproducible environment:
+
+requirements.txt (updated versions)
+setup.sh (environment setup)
+run_tests.sh (run pytest + produce logs)
+Any additional metadata files the system requires
+Ensure:
+
+The environment can be reproduced in one clean command.
+Tests run successfully under the upgraded environment.
+A summary report explaining upgrade decisions is included.
+Requirements
+Use the provided requirements_old.txt as the only input data.
+Automatically generate all missing files (setup.sh, run_tests.sh, new requirements, etc.).
+Test environment must be Pytest compatible.
+Ensure reproducible, automated, self-contained workflow.
+Expected Output
+Updated dependency list with version diff.
+Obsolete library warnings.
+Auto-generated reproducible environment scripts.
+Test stubs or basic pytest-compatible tests.
+Logs / console output from test run.
+Input File
+requirements_old.txt
+
+
+Dependency Upgrades
+
+Replaced the ancient stack with the latest stable releases (numpy==2.3.5, pandas==2.3.3, requests==2.32.5, scikit-learn==1.7.2, flask==3.1.2, pytest==9.0.1) and captured the old→new delta plus the security warning about requests==2.19.1/flask==1.0 in upgrade_report.md (line 1); the fresh pins live in requirements.txt (line 1).
+Automation
+
+Added setup.sh (line 1) to create .venv, upgrade packaging tools, and install the new dependency set, and run_tests.sh (line 1) to activate that venv, run pytest, and save the console transcript; tests/test_smoke.py (line 1) exercises numpy/pandas/requests to guard the upgrade.
+Tests
+
+bash run_tests.sh passes (3 passed), and the console log is preserved at logs/pytest.log (line 1) for future reference.
+Next Steps
+
+Commit the new artifacts so CI can reuse setup.sh/run_tests.sh.
+Extend the smoke suite if you later need coverage across flask or scikit-learn APIs.
+5 files changed
++93
+-0
+
+Undo
+
+View all changes
+requirements.txt
++6
+-0
+
+run_tests.sh
++20
+-0
+
+setup.sh
++20
+-0
+
+test_smoke.py
++19
+-0
+
+upgrade_report.md
++28
+-0
+
+pytest -v
+
+
+Tests
+
+pytest -v now reports all three smoke tests passing under the upgraded stack and provides the verbose breakdown you requested; no failures or skips occurred.
+Let me know if you’d like the verbose log saved somewhere else or if additional suites 
