@@ -1,0 +1,79 @@
+🧪 Today's Test: Dependency Upgrade
+Category: Dependency upgrade
+Definition: Detect outdated or insecure libraries, produce upgrade plan, and generate version diff.
+
+🎯 Task Description
+You are maintaining a Python project with outdated dependencies.
+Your task is to perform a dependency upgrade assessment based on the provided input file.
+
+Your Tasks
+Review the given dependency file (requirements_old.txt).
+
+Detect outdated, deprecated, or insecure versions.
+
+Generate a dependency version diff table (old → latest stable).
+
+Identify any obsolete libraries and produce warnings.
+
+Create all automation files needed for a fully reproducible environment:
+
+requirements.txt (updated versions)
+setup.sh (environment setup)
+run_tests.sh (run pytest + produce logs)
+Any additional metadata files the system requires
+Ensure:
+
+The environment can be reproduced in one clean command.
+Tests run successfully under the upgraded environment.
+A summary report explaining upgrade decisions is included.
+Requirements
+Use the provided requirements_old.txt as the only input data.
+Automatically generate all missing files (setup.sh, run_tests.sh, new requirements, etc.).
+Test environment must be Pytest compatible.
+Ensure reproducible, automated, self-contained workflow.
+Expected Output
+Updated dependency list with version diff.
+Obsolete library warnings.
+Auto-generated reproducible environment scripts.
+Test stubs or basic pytest-compatible tests.
+Logs / console output from test run.
+Input File
+requirements_old.txt
+
+
+Updates
+
+Generated a new pinned manifest so every dependency now targets the latest stable release required by the assessment (requirements.txt:1)
+Documented the upgrade rationale, diff table, and security warnings for legacy libraries for auditability (UPGRADE_REPORT.md:1)
+Added automation to bootstrap the environment and execute pytest with tee’d logs so the workflow is fully reproducible (setup.sh (line 1), run_tests.sh (line 1), logs/pytest.log (line 1))
+Created a pytest smoke suite that imports and exercises each upgraded library to catch ABI/API regressions early (tests/test_environment.py:1)
+Version Diff
+
+Package	Old	Latest	Notes
+numpy	1.18.0	2.3.5	Old wheel set unsupported on modern Python; new release fixes numerous bugs.
+pandas	0.25.3	2.3.3	Pre-1.0 API deprecated; 2.3 adds Arrow backing store and Python 3.10+ support.
+requests	2.19.1	2.32.5	2.19.1 vulnerable to CVE-2018-18074 (auth header leak); latest patches it.
+scikit-learn	0.22	1.7.2	0.22 is six years old and incompatible with recent numpy/scipy.
+flask	1.0	3.1.2	1.0 branch is end-of-life and ties you to insecure Werkzeug/Jinja.
+pytest	5.0.1	9.0.1	5.x has no support for Python ≥3.10 and lacks modern fixture features.
+Obsolete Warnings
+
+requests==2.19.1 has a known auth header leak on redirects (CVE-2018-18074); updating is mandatory for security (UPGRADE_REPORT.md:16)
+flask==1.0 locks the stack to deprecated Werkzeug/Jinja pins and no longer receives bug fixes (UPGRADE_REPORT.md:18)
+Legacy numpy/pandas/scikit-learn builds (2019-era) lack wheels for supported Python versions and receive no maintenance, posing compatibility risk (UPGRADE_REPORT.md:21)
+Testing
+
+./run_tests.sh (uses the .venv established by ./setup.sh; all 4 smoke tests pass and output is archived in logs/pytest.log)
+Test log snippet (logs/pytest.log):
+
+============================= test session starts ==============================
+platform linux -- Python 3.11.13, pytest-9.0.1, pluggy-1.6.0 -- .../.venv/bin/python
+collected 4 items
+
+tests/test_environment.py::test_numpy_pandas_integration PASSED          [ 25%]
+tests/test_environment.py::test_requests_and_versions PASSED             [ 50%]
+tests/test_environment.py::test_scikit_learn_pipeline PASSED             [ 75%]
+tests/test_environment.py::test_flask_app_smoke PASSED                   [100%]
+
+============================== 4 passed in 11.81s ==============================
+Run ./setup.sh once for a clean virtualenv install, then ./run_tests.sh to revalidate future bumps.
