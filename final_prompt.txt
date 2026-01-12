@@ -1,0 +1,39 @@
+# 🧪 Today's Test: Dependency Upgrade
+Category: Dependency upgrade  
+Definition: Detect outdated or insecure libraries, produce upgrade plan, and generate version diff.
+
+## 🎯 Task Description
+You are maintaining a Python project with outdated dependencies.  
+Your task is to perform a **dependency upgrade assessment** based on the provided input file.
+
+## Your Tasks
+1. **Review the given dependency file (`requirements_old.txt`).**  
+2. Detect outdated, deprecated, or insecure versions.  
+3. Generate a **dependency version diff table** (old → latest stable).  
+4. Identify any **obsolete libraries** and produce warnings.  
+5. Create all automation files needed for a fully reproducible environment:
+   - `requirements.txt` (updated versions)
+   - `setup.sh`  (environment setup)
+   - `run_tests.sh` (run pytest + produce logs)
+   - Any additional metadata files the system requires
+
+6. Ensure:
+   - The environment can be reproduced in one clean command.
+   - Tests run successfully under the upgraded environment.
+   - A summary report explaining upgrade decisions is included.
+
+## Requirements
+- Use the provided `requirements_old.txt` as the only input data.  
+- Automatically generate all missing files (`setup.sh`, `run_tests.sh`, new requirements, etc.).  
+- Test environment must be Pytest compatible.  
+- Ensure reproducible, automated, self-contained workflow.
+
+## Expected Output
+- Updated dependency list with version diff.
+- Obsolete library warnings.
+- Auto-generated reproducible environment scripts.
+- Test stubs or basic pytest-compatible tests.
+- Logs / console output from test run.
+
+## Input File
+`requirements_old.txt`
